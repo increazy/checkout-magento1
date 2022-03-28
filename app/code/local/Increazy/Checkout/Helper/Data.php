@@ -9,7 +9,9 @@ class Increazy_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
             header('Content-Type:application/json');
             $data = json_decode($action->getRequest()->getRawBody(), true);
             Mage::getSingleton('core/cookie')->setLifetime(0);
-            Mage::app()->setCurrentStore($data['store']);
+	    if (isset($data['store'])) {
+                Mage::app()->setCurrentStore($data['store']);
+            }
 
             if (isset($data['token'])) {
                 $customerID = Mage::helper('increazy_checkout')->hashDecode($data['token']);
