@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Increazy_Checkout>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Increazy_Checkout>
+    </modules>
+</config>
