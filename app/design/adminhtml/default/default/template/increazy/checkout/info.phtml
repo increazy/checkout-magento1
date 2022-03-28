@@ -1,0 +1,32 @@
+<?php
+$data = $this->getInfo()->getData('additional_information');
+?>
+<p><?php echo $this->__('Método de pagamento: %s', $this->htmlEscape($data['method'])) ?></p>
+
+<?php if (isset($data['cc_owner'])): ?>
+    <p><?php echo $this->__('Nome no Cartão: %s', $this->htmlEscape($data['cc_owner'])) ?></p>
+<?php endif; ?>
+
+<?php if (isset($data['cc_type'])): ?>
+    <p><?php echo $this->__('Bandeira: %s', $this->htmlEscape($data['cc_type'])) ?></p>
+<?php endif; ?>
+
+<?php if (isset($data['cc_number'])): ?>
+    <p><?php echo $this->__('Número do Cartão: xxxx-%s', $this->htmlEscape($data['cc_number'])) ?></p>
+<?php endif; ?>
+
+<?php if (isset($data['cc_exp_month'])): ?>
+    <p><?php echo $this->__('Data de Expiração: %s/%s', $this->htmlEscape($data['cc_exp_month']), $this->htmlEscape($data['cc_exp_year'])) ?></p>
+<?php endif; ?>
+
+<?php if (isset($data['internal_order']['details']['installments'])): ?>
+    <p><?php echo $this->__('Número de Parcelas: %s', $this->htmlEscape($data['internal_order']['details']['installments'])) ?></p>
+<?php endif; ?>
+
+<?php if (isset($data['response']['url'])): ?>
+    <p><?php echo $this->__('Link: <a href="%s" target="_blank">Imprimir</a>', $this->htmlEscape($data['response']['url'])) ?></p>
+<?php endif; ?>
+
+<?php if (isset($data['response']['expiration'])): ?>
+    <p><?php echo $this->__('Expiração: %s', $data['response']['expiration']) ?></p>
+<?php endif; ?>

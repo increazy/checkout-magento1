@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<config>
+   <modules>
+        <Increazy_Checkout>
+            <version>1.0.1</version>
+            <depends>
+                <Mage_Payment />
+            </depends>
+        </Increazy_Checkout>
+   </modules>
+
+
+
+
+
+   <frontend>
+        <routers>
+            <increazy_checkout>
+                <use>standard</use>
+                <args>
+                    <module>Increazy_Checkout</module>
+                    <frontName>increazy_api</frontName>
+                </args>
+            </increazy_checkout>
+        </routers>
+    </frontend>
+
+
+
+
+
+    <global>
+        <models>
+			<increazy_checkout>
+				<class>Increazy_Checkout_Model</class>
+			</increazy_checkout>
+		</models>
+
+        <helpers>
+            <increazy_checkout>
+                <class>Increazy_Checkout_Helper</class>
+            </increazy_checkout>
+        </helpers>
+
+        <blocks>
+			<increazy_checkout>
+				<class>Increazy_Checkout_Block</class>
+			</increazy_checkout>
+		</blocks>
+
+        <resources>
+			<increazy_checkout_setup>
+				<setup>
+					<module>Increazy_Checkout</module>
+					<class>Mage_Sales_Model_Mysql4_Setup</class>
+				</setup>
+
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</increazy_checkout_setup>
+		</resources>
+
+        <events>
+			<checkout_submit_all_after>
+				<observers>
+					<increazy_checkout_checkout_submit_after>
+						<type>model</type>
+						<class>increazy_checkout/observer</class>
+						<method>registerTransactionId</method>
+					</increazy_checkout_checkout_submit_after>
+				</observers>
+			</checkout_submit_all_after>
+		</events>
+    </global>
+
+
+
+
+    <default>
+		<payment>
+			<increazy-billet>
+                <active>1</active>
+                <model>increazy_checkout/billet</model>
+                <title>Boleto</title>
+			</increazy-billet>
+
+			<increazy-credit>
+                <active>1</active>
+                <model>increazy_checkout/credit</model>
+                <title>Crédito</title>
+			</increazy-credit>
+
+			<increazy-creditcard>
+                <active>1</active>
+                <model>increazy_checkout/creditcard</model>
+                <title>Cartão de Crédito</title>
+			</increazy-creditcard>
+
+			<increazy-onetap>
+                <active>1</active>
+                <model>increazy_checkout/onetap</model>
+                <title>Cartão de Crédito (1 clique)</title>
+			</increazy-onetap>
+
+			<increazy-debitcard>
+                <active>1</active>
+                <model>increazy_checkout/debitcard</model>
+                <title>Cartão de Débito</title>
+			</increazy-debitcard>
+
+			<increazy-free>
+                <active>1</active>
+                <model>increazy_checkout/free</model>
+                <title>Grátis</title>
+			</increazy-free>
+
+			<increazy-other>
+                <active>1</active>
+                <model>increazy_checkout/other</model>
+                <title>Outro</title>
+			</increazy-other>
+
+			<increazy-pix>
+                <active>1</active>
+                <model>increazy_checkout/pix</model>
+                <title>Pix</title>
+			</increazy-pix>
+
+			<increazy-ted>
+                <active>1</active>
+                <model>increazy_checkout/ted</model>
+                <title>TED</title>
+			</increazy-ted>
+		</payment>
+	</default>
+</config>
