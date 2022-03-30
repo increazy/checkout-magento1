@@ -26,12 +26,12 @@ class Increazy_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
             }
 
             $response = $callback($data);
-            die(json_encode($response));
+            echo json_encode($response);
         } catch (\Exception $e) {
             http_response_code(400);
-            die(json_encode([
+            echo json_encode([
                 'message' => $e->getMessage(),
-            ]));
+            ]);
         }
     }
 
