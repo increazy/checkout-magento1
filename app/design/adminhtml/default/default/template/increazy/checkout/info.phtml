@@ -30,3 +30,12 @@ $data = $this->getInfo()->getData('additional_information');
 <?php if (isset($data['response']['expiration'])): ?>
     <p><?php echo $this->__('Expiração: %s', $data['response']['expiration']) ?></p>
 <?php endif; ?>
+
+
+<?php if (count($data['custom_inputs']) > 0): ?>
+    <p style="font-size:18px; width:100%; padding: 16px 0px;"><b>Campos adicionais</b></p>
+
+    <?php foreach ($data['custom_inputs'] as $key => $value): ?>
+        <p><?php echo $this->__('%s: ', $key) . ' ' . $this->__('%s', $value) ?></p>
+    <?php endforeach; ?>
+<?php endif; ?>
