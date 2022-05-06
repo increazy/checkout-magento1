@@ -1,15 +1,15 @@
 <?php
 class Increazy_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    const HASH = '{token}';
-
     public function run($action, $callback, $validate)
     {
         try {
             header('Content-Type:application/json');
             $data = json_decode($action->getRequest()->getRawBody(), true);
+            $data = array_merge($data ?? [], $action->getRequest()->getParams());
+
             Mage::getSingleton('core/cookie')->setLifetime(0);
-	    if (isset($data['store'])) {
+	        if (isset($data['store'])) {
                 Mage::app()->setCurrentStore($data['store']);
             }
 
@@ -38,7 +38,8 @@ class Increazy_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
     public static function hashEncode($str)
     {
         if ($str == '') return '';
-        $token = base64_decode(self::HASH);
+        $hash = Mage::getStoreConfig('increazy_config/general/hash');
+        $token = base64_decode($hash);
         $parts = explode(':', $token);
         $key = substr(hash('sha256', $parts[0]), 0, 32);
         $iv = substr(hash('sha256', $parts[1]), 0, 16);
@@ -50,7 +51,9 @@ class Increazy_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
     public static function hashDecode($str)
     {
         if ($str == '') return '';
-        $token = base64_decode(self::HASH);
+
+        $hash = Mage::getStoreConfig('increazy_config/general/hash');
+        $token = base64_decode($hash);
         $parts = explode(':', $token);
         $key = substr(hash('sha256', $parts[0]), 0, 32);
         $iv = substr(hash('sha256', $parts[1]), 0, 16);

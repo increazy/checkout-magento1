@@ -20,6 +20,32 @@ class Increazy_Checkout_AuthController extends Mage_Core_Controller_Front_Action
         });
     }
 
+    public function bridgeAction()
+    {
+        Mage::helper('increazy_checkout')->run($this, function($body) {
+            $customerID = Mage::helper('increazy_checkout')->hashDecode($body['token']);
+            $customer = Mage::getModel('customer/customer')->load($customerID);
+
+            if ($customer->getId()) {
+                @umask(0);
+                @ob_start();
+                @session_start();
+                $session = Mage::getSingleton('customer/session');
+                $session->setCustomer($customer);
+                $session->setCustomerAsLoggedIn($customer);
+                $session->loginById($customer->getId());
+
+                return [
+                    'id'    => $customer->getId(),
+                ];
+            }
+
+            throw new \Exception('Customer login error');
+        }, function ($body) {
+            return isset($body['token']);
+        });
+    }
+
     public function loginAction()
     {
         Mage::helper('increazy_checkout')->run($this, function($body) {

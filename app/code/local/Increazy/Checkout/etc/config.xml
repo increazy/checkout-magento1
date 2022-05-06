@@ -40,6 +40,10 @@
             <increazy_checkout>
                 <class>Increazy_Checkout_Helper</class>
             </increazy_checkout>
+
+            <increazy_config>
+                <class>Increazy_Checkout</class>
+            </increazy_config>
         </helpers>
 
         <blocks>
@@ -78,6 +82,18 @@
 
 
     <default>
+        <increazy_config>
+            <button>
+                <class>button btn primary action</class>
+            </button>
+
+            <onetap>
+                <text>Compra com 1 clique</text>
+                <class>button btn primary action</class>
+                <container_class>container row</container_class>
+            </onetap>
+        </increazy_config>>
+
 		<payment>
 			<increazy-billet>
                 <active>1</active>
