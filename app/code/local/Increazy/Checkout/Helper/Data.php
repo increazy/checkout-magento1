@@ -6,7 +6,8 @@ class Increazy_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
         try {
             header('Content-Type:application/json');
             $data = json_decode($action->getRequest()->getRawBody(), true);
-            $data = array_merge($data ?? [], $action->getRequest()->getParams());
+            $data = $data != null ? $data : [];
+            $data = array_merge($data, $action->getRequest()->getParams());
 
             Mage::getSingleton('core/cookie')->setLifetime(0);
 	        if (isset($data['store'])) {
