@@ -98,6 +98,21 @@ class Increazy_Checkout_CartController extends Mage_Core_Controller_Front_Action
         });
     }
 
+    public function setMethodAction()
+    {
+        Mage::helper('increazy_checkout')->run($this, function($body) {
+            $quote = Mage::getModel('sales/quote')->load($body['quote_id']);
+
+            $quote->getPayment()->importData(array('method' => 'increazy-' . $body['method']));
+
+			$quote->save();
+
+            return $this->getQuote($quote);
+        }, function ($body) {
+            return isset($body['quote_id']) && isset($body['method']);
+        });
+    }
+
     public function setDeliveryAction()
     {
         Mage::helper('increazy_checkout')->run($this, function($body) {

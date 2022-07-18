@@ -91,6 +91,7 @@
                 <text>Compra com 1 clique</text>
                 <class>button btn primary action</class>
                 <container_class>container row</container_class>
+                <group>increazy</group>
             </onetap>
         </increazy_config>>
 
@@ -98,55 +99,64 @@
 			<increazy-billet>
                 <active>1</active>
                 <model>increazy_checkout/billet</model>
-                <title>Boleto</title>
+                <title>Increazy Boleto</title>
+                <group>increazy</group>
 			</increazy-billet>
 
 			<increazy-credit>
                 <active>1</active>
                 <model>increazy_checkout/credit</model>
-                <title>Crédito</title>
+                <title>Increazy Crédito</title>
+                <group>increazy</group>
 			</increazy-credit>
 
 			<increazy-creditcard>
                 <active>1</active>
                 <model>increazy_checkout/creditcard</model>
-                <title>Cartão de Crédito</title>
+                <title>Increazy Cartão de Crédito</title>
+                <group>increazy</group>
 			</increazy-creditcard>
 
 			<increazy-onetap>
                 <active>1</active>
                 <model>increazy_checkout/onetap</model>
-                <title>Cartão de Crédito (1 clique)</title>
+                <title>Increazy Cartão de Crédito (1 clique)</title>
+                <group>increazy</group>
 			</increazy-onetap>
 
 			<increazy-debitcard>
                 <active>1</active>
                 <model>increazy_checkout/debitcard</model>
-                <title>Cartão de Débito</title>
+                <title>Increazy Cartão de Débito</title>
+                <group>increazy</group>
 			</increazy-debitcard>
 
 			<increazy-free>
                 <active>1</active>
                 <model>increazy_checkout/free</model>
-                <title>Grátis</title>
+                <title>Increazy Grátis</title>
+                <group>increazy</group>
 			</increazy-free>
 
 			<increazy-other>
                 <active>1</active>
                 <model>increazy_checkout/other</model>
-                <title>Outro</title>
+                <title>Increazy Outro</title>
+                <group>increazy</group>
 			</increazy-other>
 
 			<increazy-pix>
                 <active>1</active>
                 <model>increazy_checkout/pix</model>
-                <title>Pix</title>
+                <title>Increazy Pix</title>
+                <group>increazy</group>
 			</increazy-pix>
 
 			<increazy-ted>
                 <active>1</active>
                 <model>increazy_checkout/ted</model>
-                <title>TED</title>
+                <title>Increazy TED</title>
+                <group>increazy</group>
 			</increazy-ted>
 		</payment>
 	</default>
