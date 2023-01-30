@@ -143,7 +143,7 @@ class Increazy_Checkout_CartController extends Mage_Core_Controller_Front_Action
 
     public static function getQuote($quote)
     {
-        $quote->setIsActive(false)->setIsMultiShipping(false);
+        $quote->setIsActive(true)->setIsMultiShipping(false);
         $quote->getBillingAddress();
         $quote->getShippingAddress()->setCollectShippingRates(true);
         $quote->setTotalsCollectedFlag(false);
