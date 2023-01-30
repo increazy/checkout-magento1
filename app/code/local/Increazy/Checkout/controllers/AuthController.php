@@ -22,25 +22,38 @@ class Increazy_Checkout_AuthController extends Mage_Core_Controller_Front_Action
 
     public function bridgeAction()
     {
+        Mage::getSingleton('core/session', array('name' => 'frontend'));
+
         Mage::helper('increazy_checkout')->run($this, function($body) {
-            $customerID = Mage::helper('increazy_checkout')->hashDecode($body['token']);
+            $customerID = Mage::helper('increazy_checkout')->hashDecode(str_replace(' ', '+', $body['token']));
             $customer = Mage::getModel('customer/customer')->load($customerID);
 
             if ($customer->getId()) {
-                @umask(0);
-                @ob_start();
-                @session_start();
+                Mage::app('default');
+                !@umask(0);
+                Mage::getSingleton('core/session', array('name' => 'frontend'));
+
                 $session = Mage::getSingleton('customer/session');
-                $session->setCustomer($customer);
-                $session->setCustomerAsLoggedIn($customer);
+                // $session->start();
+
+
                 $session->loginById($customer->getId());
 
-                return [
-                    'id'    => $customer->getId(),
-                ];
+                // return [
+                //     'id' => $customerID,
+                //     'data' => Mage::getSingleton('customer/session')->getCustomer()->getData(),
+                // ];
+
+
+                $this->_redirect('customer/account');
             }
 
-            throw new \Exception('Customer login error');
+            // throw new \Exception('Customer login error');
+
+            // return [
+            //     'token' => $body,
+            //     'cdo' => $customer->getData()
+            // ];
         }, function ($body) {
             return isset($body['token']);
         });
