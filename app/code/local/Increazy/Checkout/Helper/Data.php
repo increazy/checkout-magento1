@@ -9,7 +9,7 @@ class Increazy_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
             $data = $data != null ? $data : [];
             $data = array_merge($data, $action->getRequest()->getParams());
 
-            Mage::getSingleton('core/cookie')->setLifetime(0);
+            // Mage::getSingleton('core/cookie')->setLifetime(0);
 	        if (isset($data['store'])) {
                 Mage::app()->setCurrentStore($data['store']);
             }
