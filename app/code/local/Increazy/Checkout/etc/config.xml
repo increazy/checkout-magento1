@@ -97,63 +97,54 @@
 
 		<payment>
 			<increazy-billet>
-                <active>1</active>
                 <model>increazy_checkout/billet</model>
                 <title>Increazy Boleto</title>
                 <group>increazy</group>
 			</increazy-billet>
 
 			<increazy-credit>
-                <active>1</active>
                 <model>increazy_checkout/credit</model>
                 <title>Increazy Crédito</title>
                 <group>increazy</group>
 			</increazy-credit>
 
 			<increazy-creditcard>
-                <active>1</active>
                 <model>increazy_checkout/creditcard</model>
                 <title>Increazy Cartão de Crédito</title>
                 <group>increazy</group>
 			</increazy-creditcard>
 
 			<increazy-onetap>
-                <active>1</active>
                 <model>increazy_checkout/onetap</model>
                 <title>Increazy Cartão de Crédito (1 clique)</title>
                 <group>increazy</group>
 			</increazy-onetap>
 
 			<increazy-debitcard>
-                <active>1</active>
                 <model>increazy_checkout/debitcard</model>
                 <title>Increazy Cartão de Débito</title>
                 <group>increazy</group>
 			</increazy-debitcard>
 
 			<increazy-free>
-                <active>1</active>
                 <model>increazy_checkout/free</model>
                 <title>Increazy Grátis</title>
                 <group>increazy</group>
 			</increazy-free>
 
 			<increazy-other>
-                <active>1</active>
                 <model>increazy_checkout/other</model>
                 <title>Increazy Outro</title>
                 <group>increazy</group>
 			</increazy-other>
 
 			<increazy-pix>
-                <active>1</active>
                 <model>increazy_checkout/pix</model>
                 <title>Increazy Pix</title>
                 <group>increazy</group>
 			</increazy-pix>
 
 			<increazy-ted>
-                <active>1</active>
                 <model>increazy_checkout/ted</model>
                 <title>Increazy TED</title>
                 <group>increazy</group>
