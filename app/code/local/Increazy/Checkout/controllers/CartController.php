@@ -4,8 +4,8 @@ class Increazy_Checkout_CartController extends Mage_Core_Controller_Front_Action
     public function getOrCreateAction()
     {
         Mage::helper('increazy_checkout')->run($this, function($body) {
-            $quote = Mage::getModel('sales/quote')->setStore(Mage::app()->getStore());
-            $customerID = !isset($data['token']) ? null : Mage::helper('increazy_checkout')->hashDecode($data['token']);
+            $quote = Mage::getModel('sales/quote')->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $customerID = !isset($body['token']) ? null : Mage::helper('increazy_checkout')->hashDecode($body['token']);
     
             if (isset($body['quote_id'])) {
                 $quote = $quote->load($body['quote_id']);
@@ -170,7 +170,7 @@ class Increazy_Checkout_CartController extends Mage_Core_Controller_Front_Action
             ],
 			'items'				=> array_map(function($item) {
                 $image = Mage::getResourceModel('catalog/product')
-                    ->getAttributeRawValue($item->getProduct()->getId(), 'image', Mage::app()->getStore()->getId());
+                    ->getAttributeRawValue($item->getProduct()->getId(), 'image', Mage_Core_Model_App::ADMIN_STORE_ID);
 
                 return [
                     'item_id'	   	  => $item->getId(),

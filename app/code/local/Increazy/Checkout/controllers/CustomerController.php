@@ -44,7 +44,7 @@ class Increazy_Checkout_CustomerController extends Mage_Core_Controller_Front_Ac
         Mage::helper('increazy_checkout')->run($this, function($body) {
             $customer = Mage::getModel("customer/customer");
             $customer->setWebsiteId(Mage::app()->getWebsite()->getId())
-                ->setStore(Mage::app()->getStore())
+                ->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID)
                 ->setFirstname($body['firstname'])
                 ->setLastname($body['lastname'])
                 ->setEmail($body['email'])
@@ -71,7 +71,7 @@ class Increazy_Checkout_CustomerController extends Mage_Core_Controller_Front_Ac
             $customer = Mage::getModel('customer/customer')->load($body['entity_id']);
 
             $customer->setWebsiteId(Mage::app()->getWebsite()->getId())
-                ->setStore(Mage::app()->getStore())
+                ->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID)
                 ->setFirstname($body['firstname'])
                 ->setLastname($body['lastname'])
                 ->setEmail($body['email'])

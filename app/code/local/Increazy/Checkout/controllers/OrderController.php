@@ -10,7 +10,7 @@ class Increazy_Checkout_OrderController extends Mage_Core_Controller_Front_Actio
 
             $items = array();
             foreach ($order->getAllItems() as $item) {
-                $image = Mage::getResourceModel('catalog/product')->getAttributeRawValue($item->getProductId(), 'image', Mage::app()->getStore()->getId());
+                $image = Mage::getResourceModel('catalog/product')->getAttributeRawValue($item->getProductId(), 'image', Mage_Core_Model_App::ADMIN_STORE_ID);
 
                 if($image) {
                     $image = Mage::getModel('catalog/product_media_config')->getMediaUrl($image);
@@ -21,7 +21,7 @@ class Increazy_Checkout_OrderController extends Mage_Core_Controller_Front_Actio
                 $categoryIds  = $product->getCategoryIds();
 
                 foreach ($categoryIds as $category_id) {
-                    $category = Mage::getModel('catalog/category')->setStoreId(Mage::app()->getStore()->getId())->load($category_id);
+                    $category = Mage::getModel('catalog/category')->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID)->load($category_id);
                     $categoryNames[] = $category->getName();
                 }
 
