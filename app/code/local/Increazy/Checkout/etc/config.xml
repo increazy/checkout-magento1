@@ -56,7 +56,7 @@
 			<increazy_checkout_setup>
 				<setup>
 					<module>Increazy_Checkout</module>
-					<class>Mage_Sales_Model_Mysql4_Setup</class>
+					<class>Mage_Sales_Model_Resource_Setup</class>
 				</setup>
 
 				<connection>
