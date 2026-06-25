@@ -29,12 +29,13 @@ class Increazy_Checkout_CatalogController extends Mage_Core_Controller_Front_Act
                 $productIds[] = (int)$p->getId();
             }
 
-            // 5 batch queries — zero N+1
-            $optionMap     = $this->_loadOptionMap();
-            $galleryMap    = $this->_loadGalleryMap($productIds, $mediaBase);
-            $productCatMap = $this->_loadProductCategoryMap($productIds);
-            $relatedMap    = $this->_loadRelatedMap($productIds);
-            $childrenMap   = $this->_loadChildrenMap($productIds);
+            $optionMap            = $this->_loadOptionMap();
+            $galleryMap           = $this->_loadGalleryMap($productIds, $mediaBase);
+            $productCatMap        = $this->_loadProductCategoryMap($productIds);
+            $relatedMap           = $this->_loadRelatedMap($productIds);
+            $childrenMap          = $this->_loadChildrenMap($productIds);
+            $configurableAttrMap  = $this->_loadConfigurableAttributesMap($productIds);
+            $customOptionsMap     = $this->_loadCustomOptionsMap($productIds);
 
             $allCatIds = [];
             foreach ($productCatMap as $catIds) {
@@ -76,8 +77,10 @@ class Increazy_Checkout_CatalogController extends Mage_Core_Controller_Front_Act
                 ));
 
                 // Relacionados e filhos de configurável
-                $data['related_ids']  = $relatedMap[$id]  ?? [];
-                $data['children_ids'] = $childrenMap[$id] ?? [];
+                $data['related_ids']            = $relatedMap[$id]           ?? [];
+                $data['children_ids']           = $childrenMap[$id]          ?? [];
+                $data['configurable_attributes'] = $configurableAttrMap[$id] ?? [];
+                $data['custom_options']          = $customOptionsMap[$id]    ?? [];
 
                 $items[] = $data;
             }
@@ -255,6 +258,95 @@ class Increazy_Checkout_CatalogController extends Mage_Core_Controller_Front_Act
         $map = [];
         foreach ($conn->fetchAll($select) as $row) {
             $map[(int)$row['parent_id']][] = (int)$row['product_id'];
+        }
+        return $map;
+    }
+
+    // Eixos de variação de configuráveis (ex: ["color","size"]) — 1 query
+    private function _loadConfigurableAttributesMap(array $ids)
+    {
+        if (!$ids) return [];
+
+        $resource = Mage::getSingleton('core/resource');
+        $conn     = $resource->getConnection('core_read');
+
+        $select = $conn->select()
+            ->from(['s' => $resource->getTableName('catalog_product_super_attribute')], ['product_id'])
+            ->join(['a' => $resource->getTableName('eav_attribute')], 's.attribute_id = a.attribute_id', ['attribute_code'])
+            ->where('s.product_id IN (?)', $ids)
+            ->order('s.position ASC');
+
+        $map = [];
+        foreach ($conn->fetchAll($select) as $row) {
+            $map[(int)$row['product_id']][] = $row['attribute_code'];
+        }
+        return $map;
+    }
+
+    // Custom options com valores (select/radio/checkbox) — 2 queries
+    private function _loadCustomOptionsMap(array $ids)
+    {
+        if (!$ids) return [];
+
+        $resource = Mage::getSingleton('core/resource');
+        $conn     = $resource->getConnection('core_read');
+
+        $select = $conn->select()
+            ->from(['o' => $resource->getTableName('catalog_product_option')],
+                ['product_id', 'option_id', 'type', 'is_require', 'sort_order', 'sku', 'price', 'price_type'])
+            ->join(['t' => $resource->getTableName('catalog_product_option_title')],
+                'o.option_id = t.option_id AND t.store_id = 0', ['title'])
+            ->where('o.product_id IN (?)', $ids)
+            ->order('o.sort_order ASC');
+
+        $options = [];
+        $optionIds = [];
+        foreach ($conn->fetchAll($select) as $row) {
+            $oid = (int)$row['option_id'];
+            $options[$oid] = [
+                'option_id'  => $oid,
+                'title'      => $row['title'],
+                'type'       => $row['type'],
+                'is_required'=> (bool)$row['is_require'],
+                'sort_order' => (int)$row['sort_order'],
+                'sku'        => $row['sku'],
+                'price'      => $row['price'],
+                'price_type' => $row['price_type'],
+                'values'     => [],
+                '_product_id'=> (int)$row['product_id'],
+            ];
+            $optionIds[] = $oid;
+        }
+
+        if ($optionIds) {
+            $vSelect = $conn->select()
+                ->from(['v' => $resource->getTableName('catalog_product_option_type_value')],
+                    ['option_id', 'option_type_id', 'sku', 'price', 'price_type', 'sort_order'])
+                ->join(['vt' => $resource->getTableName('catalog_product_option_type_title')],
+                    'v.option_type_id = vt.option_type_id AND vt.store_id = 0', ['title'])
+                ->where('v.option_id IN (?)', $optionIds)
+                ->order('v.sort_order ASC');
+
+            foreach ($conn->fetchAll($vSelect) as $row) {
+                $oid = (int)$row['option_id'];
+                if (isset($options[$oid])) {
+                    $options[$oid]['values'][] = [
+                        'option_type_id' => (int)$row['option_type_id'],
+                        'title'          => $row['title'],
+                        'price'          => $row['price'],
+                        'price_type'     => $row['price_type'],
+                        'sku'            => $row['sku'],
+                        'sort_order'     => (int)$row['sort_order'],
+                    ];
+                }
+            }
+        }
+
+        $map = [];
+        foreach ($options as $opt) {
+            $pid = $opt['_product_id'];
+            unset($opt['_product_id']);
+            $map[$pid][] = $opt;
         }
         return $map;
     }
