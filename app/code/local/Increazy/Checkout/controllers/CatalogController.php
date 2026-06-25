@@ -293,9 +293,11 @@ class Increazy_Checkout_CatalogController extends Mage_Core_Controller_Front_Act
 
         $select = $conn->select()
             ->from(['o' => $resource->getTableName('catalog_product_option')],
-                ['product_id', 'option_id', 'type', 'is_require', 'sort_order', 'sku', 'price', 'price_type'])
+                ['product_id', 'option_id', 'type', 'is_require', 'sort_order'])
             ->join(['t' => $resource->getTableName('catalog_product_option_title')],
                 'o.option_id = t.option_id AND t.store_id = 0', ['title'])
+            ->joinLeft(['p' => $resource->getTableName('catalog_product_option_price')],
+                'o.option_id = p.option_id AND p.store_id = 0', ['price', 'price_type'])
             ->where('o.product_id IN (?)', $ids)
             ->order('o.sort_order ASC');
 
@@ -309,7 +311,6 @@ class Increazy_Checkout_CatalogController extends Mage_Core_Controller_Front_Act
                 'type'       => $row['type'],
                 'is_required'=> (bool)$row['is_require'],
                 'sort_order' => (int)$row['sort_order'],
-                'sku'        => $row['sku'],
                 'price'      => $row['price'],
                 'price_type' => $row['price_type'],
                 'values'     => [],
@@ -321,9 +322,11 @@ class Increazy_Checkout_CatalogController extends Mage_Core_Controller_Front_Act
         if ($optionIds) {
             $vSelect = $conn->select()
                 ->from(['v' => $resource->getTableName('catalog_product_option_type_value')],
-                    ['option_id', 'option_type_id', 'sku', 'price', 'price_type', 'sort_order'])
+                    ['option_id', 'option_type_id', 'sku', 'sort_order'])
                 ->join(['vt' => $resource->getTableName('catalog_product_option_type_title')],
                     'v.option_type_id = vt.option_type_id AND vt.store_id = 0', ['title'])
+                ->joinLeft(['vp' => $resource->getTableName('catalog_product_option_type_price')],
+                    'v.option_type_id = vp.option_type_id AND vp.store_id = 0', ['price', 'price_type'])
                 ->where('v.option_id IN (?)', $optionIds)
                 ->order('v.sort_order ASC');
 
