@@ -34,6 +34,10 @@ class Increazy_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
                 'message' => $e->getMessage(),
             ]);
         }
+        // se algum callback setou redirect (ex: AuthController::bridgeAction), deixa Magento concluir o dispatch
+        if (!$action->getResponse()->isRedirect()) {
+            exit;
+        }
     }
 
     public static function hashEncode($str)
